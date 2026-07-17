@@ -1,0 +1,4 @@
+module FloppyDiskGenerator {
+header "FloppyDiskGenerator-Swift.h"
+export *
+}

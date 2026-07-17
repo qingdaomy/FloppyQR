@@ -1,0 +1,12 @@
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/App.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/ContentView.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Models/AppConfig.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Models/DataPayload.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Models/LoaderHTMLTemplate.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Services/CompressionService.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Services/ImageProcessor.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Services/PNGEncoder.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Services/QRCodeGenerator.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Views/AdvancedOptionsView.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Views/CodeInputView.swift
+/Users/Apple/Desktop/3.5QR/数字软盘生成器/数字软盘生成器/Views/MetadataFormView.swift

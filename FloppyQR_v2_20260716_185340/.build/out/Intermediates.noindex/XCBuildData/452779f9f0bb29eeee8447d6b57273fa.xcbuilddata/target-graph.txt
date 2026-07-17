@@ -1,0 +1,6 @@
+Target dependency graph (3 targets)
+Target 'AllExcludingTests' in project 'Aggregate'
+➜ Explicit dependency on target 'FloppyDiskGenerator-product' in project 'FloppyDiskGenerator'
+➜ Explicit dependency on target 'FloppyDiskGenerator' in project 'FloppyDiskGenerator'
+Target 'FloppyDiskGenerator' in project 'FloppyDiskGenerator' (no dependencies)
+Target 'FloppyDiskGenerator-product' in project 'FloppyDiskGenerator' (no dependencies)

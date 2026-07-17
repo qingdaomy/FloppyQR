@@ -1,0 +1,355 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0362A22BF3A5EF8A3B198F2B /* LoaderHTMLTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0D29BF19A7A6A4F9391ABB /* LoaderHTMLTemplate.swift */; };
+		1292196B31C8E6718567976A /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB69E98081E8CE53FD12459B /* ImageProcessor.swift */; };
+		26B7A2CF4ADA95996F6359A5 /* CompressionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F3BAED78041CA7B0D93130 /* CompressionService.swift */; };
+		7D95A18513DD9F52BCFB6F11 /* PNGEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34F7C332B994EC47C2780EC /* PNGEncoder.swift */; };
+		83CB9D42FAC818729146829B /* DataPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B61D76440381FF351CD070 /* DataPayload.swift */; };
+		88C93FA8C0519DA343A00F31 /* MetadataFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D1BF6D495D6802D54AFB09 /* MetadataFormView.swift */; };
+		A3E2C80C3E04AD49727FA3AF /* QRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C12CA2F73760EBE2C88B /* QRCodeGenerator.swift */; };
+		AAAE3F362A2F1AFEB558F45C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA41B3BC815D16E574E9CD /* ContentView.swift */; };
+		E36F6EA3C587903FA3630493 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BB65A5330A4BC6E9C7D86F /* App.swift */; };
+		E3FDA24D534015F143006D19 /* CodeInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627E36B8B07037F14A125774 /* CodeInputView.swift */; };
+		FE0ABD557C6B3A35ABCAEBC9 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF865205A99D66A88E3F26A8 /* AppConfig.swift */; };
+		FF40FA0771F5FE0D71BE5339 /* AdvancedOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC0BF7E498506F3C40F097F /* AdvancedOptionsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		14B61D76440381FF351CD070 /* DataPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPayload.swift; sourceTree = "<group>"; };
+		25BB65A5330A4BC6E9C7D86F /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		2E0D29BF19A7A6A4F9391ABB /* LoaderHTMLTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderHTMLTemplate.swift; sourceTree = "<group>"; };
+		2F09C12CA2F73760EBE2C88B /* QRCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeGenerator.swift; sourceTree = "<group>"; };
+		627E36B8B07037F14A125774 /* CodeInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInputView.swift; sourceTree = "<group>"; };
+		77D1BF6D495D6802D54AFB09 /* MetadataFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataFormView.swift; sourceTree = "<group>"; };
+		92FA41B3BC815D16E574E9CD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		98522C91B2BEA1B83B2FA9B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B6F3BAED78041CA7B0D93130 /* CompressionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompressionService.swift; sourceTree = "<group>"; };
+		C34F7C332B994EC47C2780EC /* PNGEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNGEncoder.swift; sourceTree = "<group>"; };
+		CCE1BA792F19643B59B01B5E /* 数字软盘生成器.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "数字软盘生成器.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF865205A99D66A88E3F26A8 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		FB69E98081E8CE53FD12459B /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		FBC0BF7E498506F3C40F097F /* AdvancedOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOptionsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		4CF5E4263069084B612656E8 /* 数字软盘生成器 */ = {
+			isa = PBXGroup;
+			children = (
+				25BB65A5330A4BC6E9C7D86F /* App.swift */,
+				92FA41B3BC815D16E574E9CD /* ContentView.swift */,
+				98522C91B2BEA1B83B2FA9B5 /* Info.plist */,
+				D2F4795AD7BF12AF297D6B40 /* Models */,
+				CCD1529AF9FDF90B238BB95D /* Services */,
+				AB63A56808DB8EFE4D655FFA /* Views */,
+			);
+			path = "数字软盘生成器";
+			sourceTree = "<group>";
+		};
+		76749E57D3F49BC4C83B3EBD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CCE1BA792F19643B59B01B5E /* 数字软盘生成器.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9E71D544DACB41307D2AAAF5 = {
+			isa = PBXGroup;
+			children = (
+				4CF5E4263069084B612656E8 /* 数字软盘生成器 */,
+				76749E57D3F49BC4C83B3EBD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AB63A56808DB8EFE4D655FFA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FBC0BF7E498506F3C40F097F /* AdvancedOptionsView.swift */,
+				627E36B8B07037F14A125774 /* CodeInputView.swift */,
+				77D1BF6D495D6802D54AFB09 /* MetadataFormView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CCD1529AF9FDF90B238BB95D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B6F3BAED78041CA7B0D93130 /* CompressionService.swift */,
+				FB69E98081E8CE53FD12459B /* ImageProcessor.swift */,
+				C34F7C332B994EC47C2780EC /* PNGEncoder.swift */,
+				2F09C12CA2F73760EBE2C88B /* QRCodeGenerator.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D2F4795AD7BF12AF297D6B40 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DF865205A99D66A88E3F26A8 /* AppConfig.swift */,
+				14B61D76440381FF351CD070 /* DataPayload.swift */,
+				2E0D29BF19A7A6A4F9391ABB /* LoaderHTMLTemplate.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D6258D04B939F612B83D2B0D /* 数字软盘生成器 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23F5B116F1C23A684445444E /* Build configuration list for PBXNativeTarget "数字软盘生成器" */;
+			buildPhases = (
+				33080AAFD4E5DFF3BA332BB0 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "数字软盘生成器";
+			packageProductDependencies = (
+			);
+			productName = "数字软盘生成器";
+			productReference = CCE1BA792F19643B59B01B5E /* 数字软盘生成器.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3DE0820766FD345D153BAE64 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D6258D04B939F612B83D2B0D = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2C8E24B80A0B9914215D6C0F /* Build configuration list for PBXProject "数字软盘生成器" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 9E71D544DACB41307D2AAAF5;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 76749E57D3F49BC4C83B3EBD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D6258D04B939F612B83D2B0D /* 数字软盘生成器 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		33080AAFD4E5DFF3BA332BB0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF40FA0771F5FE0D71BE5339 /* AdvancedOptionsView.swift in Sources */,
+				E36F6EA3C587903FA3630493 /* App.swift in Sources */,
+				FE0ABD557C6B3A35ABCAEBC9 /* AppConfig.swift in Sources */,
+				E3FDA24D534015F143006D19 /* CodeInputView.swift in Sources */,
+				26B7A2CF4ADA95996F6359A5 /* CompressionService.swift in Sources */,
+				AAAE3F362A2F1AFEB558F45C /* ContentView.swift in Sources */,
+				83CB9D42FAC818729146829B /* DataPayload.swift in Sources */,
+				1292196B31C8E6718567976A /* ImageProcessor.swift in Sources */,
+				0362A22BF3A5EF8A3B198F2B /* LoaderHTMLTemplate.swift in Sources */,
+				88C93FA8C0519DA343A00F31 /* MetadataFormView.swift in Sources */,
+				7D95A18513DD9F52BCFB6F11 /* PNGEncoder.swift in Sources */,
+				A3E2C80C3E04AD49727FA3AF /* QRCodeGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6E0A966B4DA60AF9776C97CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.7;
+			};
+			name = Debug;
+		};
+		8372942E21BDEEF4EE40503D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "数字软盘生成器/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.digitalfloppy.FloppyDiskGenerator;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		94EDDCD764604A10C0C23B55 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "数字软盘生成器/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.digitalfloppy.FloppyDiskGenerator;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A7470CC60B3516AD613431BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.7;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		23F5B116F1C23A684445444E /* Build configuration list for PBXNativeTarget "数字软盘生成器" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8372942E21BDEEF4EE40503D /* Debug */,
+				94EDDCD764604A10C0C23B55 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2C8E24B80A0B9914215D6C0F /* Build configuration list for PBXProject "数字软盘生成器" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E0A966B4DA60AF9776C97CA /* Debug */,
+				A7470CC60B3516AD613431BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3DE0820766FD345D153BAE64 /* Project object */;
+}
