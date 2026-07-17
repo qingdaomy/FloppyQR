@@ -8,7 +8,15 @@ FloppyQR packages web apps into two PNG files for offline distribution.
 | `QRboot_<name>_<ver>_<dev>_<id>.png` | QR code → opens loader in browser |
 | `Floppy_<name>_<ver>_<dev>_<id>.png` | PNG + zDAT chunk with compressed app |
 
-## Quick Install (macOS)
+## Quick Install
+
+**跨平台（Python，推荐 Agent 使用）**
+```bash
+pip install Pillow qrcode
+python generator/floppyqr.py -i ./myapp -n "MyApp" -d "Developer"
+```
+
+**macOS DMG（手动安装）**
 
 **方式一：DMG（手动安装）**
 ```bash
@@ -81,8 +89,16 @@ User scans QRboot → data:text/html loader → select Floppy PNG
 3. Agent runs FloppyQR CLI on user's project
 4. Agent returns generated QRboot + Floppy PNGs
 
-## For Cross-Platform (Linux/Windows)
+## Cross-Platform (Linux/Windows/macOS)
 
-Currently macOS only. For web-based generation, use the library components directly:
-- Python: `PIL` + `zlib` + `qrcode` (see generator/generate.py)
-- JavaScript: Available as npm package (coming soon)
+Python CLI is available and works on all platforms:
+
+```bash
+pip install Pillow qrcode
+python generator/floppyqr.py -i ./myapp -n "MyApp"
+```
+
+Or use the library directly in Python scripts:
+```python
+from generator.generate import bundle_directory, build_payload, create_floppy_png, generate_qrboot
+```
