@@ -13,7 +13,7 @@ struct AppMetadata {
 }
 
 struct AdvancedOptions {
-    var strictPairing: Bool = true
+    var strictPairing: Bool = false
 }
 
 struct GenerationConfig {
