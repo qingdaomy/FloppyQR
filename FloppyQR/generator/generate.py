@@ -193,10 +193,13 @@ def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256, margin=
     crc = zlib.crc32(chunk_type + payload) & 0xffffffff
     chunk = chunk_len + chunk_type + payload + struct.pack('>I', crc)
 
-    iend = png_bytes.rfind(b'IEND')
-    if iend == -1:
+    # Search for IEND chunk (length + type + CRC = 12 bytes)
+    # rfind on b'IEND' finds the type field, we need the chunk start
+    iend_type = png_bytes.rfind(b'IEND')
+    if iend_type == -1 or iend_type < 4:
         raise RuntimeError("IEND chunk not found")
-    return png_bytes[:iend] + chunk + png_bytes[iend:]
+    iend_start = iend_type - 4  # 4 bytes before type = length field
+    return png_bytes[:iend_start] + chunk + png_bytes[iend_start:]
 
 # ──────────────────────────────────────────────
 #  QR code generation
