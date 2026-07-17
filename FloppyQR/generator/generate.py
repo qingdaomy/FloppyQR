@@ -163,21 +163,21 @@ def build_payload(html_data, app_name, app_id_hex, strict=False, icon_rgba=None)
 # ──────────────────────────────────────────────
 #  PNG generation (zDAT chunk insertion)
 # ──────────────────────────────────────────────
-def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256, margin=20):
+def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256):
     """Create a Floppy PNG with zDAT chunk.
     White background + optional logo at right-bottom corner.
     """
     # Create white image
     img = Image.new('RGBA', (size, size), (255, 255, 255, 255))
 
-    # Draw logo at right-bottom corner
+    # Draw logo centered
     if logo_path and os.path.exists(logo_path):
         try:
             logo = Image.open(logo_path).convert('RGBA')
             max_w, max_h = icon_size, icon_size
             logo.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
-            x = size - logo.width - margin
-            y = size - logo.height - margin
+            x = (size - logo.width) // 2
+            y = (size - logo.height) // 2
             img.paste(logo, (x, y), logo)
         except Exception as e:
             print(f"  ⚠️  Logo error: {e}")
