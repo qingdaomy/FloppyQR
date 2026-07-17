@@ -2,7 +2,7 @@
 """
 FloppyQR - Core generation library (cross-platform)
 """
-import struct, zlib, io, os, re, html as html_mod
+import struct, zlib, io, os, re, base64, html as html_mod
 from PIL import Image
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
@@ -170,17 +170,23 @@ def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256):
     # Create white image
     img = Image.new('RGBA', (size, size), (255, 255, 255, 255))
 
-    # Draw logo centered
+    # Draw logo centered (use default FloppyQR icon if no logo specified)
+    logo_img = None
     if logo_path and os.path.exists(logo_path):
         try:
-            logo = Image.open(logo_path).convert('RGBA')
-            max_w, max_h = icon_size, icon_size
-            logo.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
-            x = (size - logo.width) // 2
-            y = (size - logo.height) // 2
-            img.paste(logo, (x, y), logo)
+            logo_img = Image.open(logo_path).convert('RGBA')
         except Exception as e:
             print(f"  ⚠️  Logo error: {e}")
+    # Always draw a logo (default or user-provided)
+    try:
+        if logo_img is None:
+            logo_img = Image.open(io.BytesIO(_DEFAULT_ICON_PNG)).convert('RGBA')
+        logo_img.thumbnail((icon_size, icon_size), Image.Resampling.LANCZOS)
+        x = (size - logo_img.width) // 2
+        y = (size - logo_img.height) // 2
+        img.paste(logo_img, (x, y), logo_img)
+    except Exception as e:
+        print(f"  ⚠️  Logo draw error: {e}")
 
     # Save to PNG bytes
     buf = io.BytesIO()
@@ -263,5 +269,20 @@ def process_icon(image_path, size=32):
     img = img.resize((size, size), Image.Resampling.LANCZOS)
     return img.tobytes()
 
+_DEFAULT_ICON_B64 = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACl0lEQVR4nO1WTWsTURQ9d+bNtM2YWhNSFEHFIn4h+QMW3QiiuHThT/AXuHcpLhRcuy+I4kJ0YcGN4MKKiEjBCsUUIQXb1JrETCbvyb2Zp0lsM9NUSBY98Dbz7rvv3DP345ExxmCIcIZ5+R6BkVBAJRm0DMB5SkRwqXtPG17tHLb71l45PcbbgIZdBWq7DWbFMTxfruLD6i8Up8dx+Vgg35kyB/hutYGXX6twiXBkUuH6iSweL/1EuRrhZnFKbBm0UwItY8Tpi+Uqrj5ZgQk1bpybEgIsO4vmEOHVSg235svC5vzRjBB4+HEDzz5tYHE9xP2L023CfUioLaOPTyxVQngOwQsUsv6/LgJFyAQKPhFy4658m/QJmayHB+8rotKd2YIEQzRAFXgOCftIG4m8F/WWQa2hsdnU2Ax1rB4QaoODgYt7b9fx9EtViLCP1ApY9B5hJ3yBQBvM7Pcwk/OhtUGxMCb7pkNFVxF+xMQGLkMLlpFLq/PAteP7ZPWqxmpTTELRf+gDgedgvlTD7TffoTp+GkfLyUhx4jZbBq+/1eG7hCiWIqnGVRIBbjQZz0E90ri7sNaVzb3OeS/rOyhMuGi0jChAuyXgApi7cgin874444j7oamN2H2uhLgwV9qdAoYTySW5PB+XWVoox4fn0p9WPRABi3rUlpMrKanFWxs5g2SoFDbikJWX7E4gYG1SziKM/jj+O3bbKwnWJo0tQ6WRM/BIJE0jq7XhM/a3DUwgMkAUGSyUGzh5wN9REnIZhs2O1r0TAhRn2pm8D+7klx6VpKT6jVULa8Nd0XUIp3J+l8/ULyITO+KZv7gWyhxI+3biu3gwnc2PYfbwRF/iNLJPMgv7yBwEWz1kR04BZ5iX7xEYCQV+A6Q6EB6kFhzqAAAAAElFTkSuQmCC"
+
+_DEFAULT_ICON_PNG = base64.b64decode(_DEFAULT_ICON_B64)
+
+def _load_default_icon():
+    """Load the embedded FloppyQR logo as 32x32 RGBA bytes."""
+    from PIL import Image
+    import io
+    img = Image.open(io.BytesIO(_DEFAULT_ICON_PNG)).convert('RGBA')
+    img = img.resize((32, 32), Image.Resampling.LANCZOS)
+    return img.tobytes()
+
+_DEFAULT_ICON_RGBA = _load_default_icon()
+
 def placeholder_icon():
-    return b'\xc8' * (32 * 32 * 4)
+    """FloppyQR logo as 32x32 RGBA bytes."""
+    return _DEFAULT_ICON_RGBA

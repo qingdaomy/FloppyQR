@@ -23,7 +23,16 @@ struct ImageProcessor {
         return Data(bytes: data, count: w * h * 4)
     }
 
+    /// Returns the FloppyQR app icon as 32x32 RGBA data.
+    /// Used as the default icon on Floppy PNG when user doesn't provide one.
     static func placeholderIcon() -> Data {
-        Data(repeating: 200, count: 32 * 32 * 4)
+        // Load the app icon from bundle
+        if let iconImage = NSImage(named: "AppIcon") {
+            if let data = processIcon(iconImage) {
+                return data
+            }
+        }
+        // Fallback: gray placeholder
+        return Data(repeating: 200, count: 32 * 32 * 4)
     }
 }
