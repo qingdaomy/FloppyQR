@@ -7,3 +7,21 @@ build/
 *.dSYM.zip
 *.ipa
 *.dmg
+*.png
+*.bin
+*.pcm
+
+# Backup directories
+FloppyQR_v*/
+数字软盘生成器_v*/
+
+# Build artifacts
+.build/
+*.swiftmodule
+*.swiftdoc
+*.swiftsourceinfo
+*.abi.json
+
+# Temp files
+/tmp/
+*.log
