@@ -10,15 +10,21 @@ FloppyQR packages web apps into two PNG files for offline distribution.
 
 ## Quick Install (macOS)
 
+**方式一：DMG（手动安装）**
 ```bash
-# Download latest release
+curl -L -o ~/Downloads/FloppyQR.dmg https://github.com/qingdaomy/FloppyQR/releases/latest/download/FloppyQR_macOS.dmg
+open ~/Downloads/FloppyQR.dmg
+# 拖 FloppyQR.app 到 Applications 文件夹
+```
+
+**方式二：CLI 工具（Agent 自动使用）**
+```bash
 curl -L -o FloppyQR.zip https://github.com/qingdaomy/FloppyQR/releases/latest/download/FloppyQR_macOS.zip
 unzip FloppyQR.zip
 # Run CLI tool
 FloppyQR.app/Contents/MacOS/FloppyQR -i ./index.html -n "MyApp"
 # Or add to PATH
 sudo ln -s "$(pwd)/FloppyQR.app/Contents/MacOS/FloppyQR" /usr/local/bin/FloppyQR
-FloppyQR -i ./project-dir -n "Game" -d "Qingdaomy"
 ```
 
 ## CLI Usage (No Xcode needed)
