@@ -16,6 +16,7 @@
 		95DB03A9E34A59C5EF23EA75 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F71AB366E5C21E6D00E48C /* Localization.swift */; };
 		9A17240DF9DB2C8AA43DDA3C /* MetadataFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EF688817061B4880CB32C3 /* MetadataFormView.swift */; };
 		A61DF10D0744B4493A2D36D0 /* RecentProjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47507E00C1DE763D7D0EC0DE /* RecentProjects.swift */; };
+		ADA271C742FCAA7ACFA77598 /* FloppyQRHTMLTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64351534BB5ABE08355F062 /* FloppyQRHTMLTemplate.swift */; };
 		B5F155A3288C575B6335DD81 /* QRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FC6FFF6CF5BED062E3072 /* QRCodeGenerator.swift */; };
 		DA1F39E762D9CC01488EF357 /* DataPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E61E1E9823552E26357C890 /* DataPayload.swift */; };
 		DE3BD91BD3B2119669C4DA9A /* LoaderHTMLTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3282FC78027CE53C0D28AAD6 /* LoaderHTMLTemplate.swift */; };
@@ -45,6 +46,7 @@
 		A7F6C96D5DA0A46B742F2140 /* CodeInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInputView.swift; sourceTree = "<group>"; };
 		B3B5B91D74C577929C5B6C3E /* CompressionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompressionService.swift; sourceTree = "<group>"; };
 		BD824F7E126A26894C7C89CB /* EntryPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryPoint.swift; sourceTree = "<group>"; };
+		D64351534BB5ABE08355F062 /* FloppyQRHTMLTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloppyQRHTMLTemplate.swift; sourceTree = "<group>"; };
 		F0A28F044D2CE7E465F382BB /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		F45CA287A0A81905EEC6C950 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FBE4CAD0EB6A50EAD9CDD435 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 			children = (
 				FBE4CAD0EB6A50EAD9CDD435 /* AppConfig.swift */,
 				2E61E1E9823552E26357C890 /* DataPayload.swift */,
+				D64351534BB5ABE08355F062 /* FloppyQRHTMLTemplate.swift */,
 				3282FC78027CE53C0D28AAD6 /* LoaderHTMLTemplate.swift */,
 				45F71AB366E5C21E6D00E48C /* Localization.swift */,
 				47507E00C1DE763D7D0EC0DE /* RecentProjects.swift */,
@@ -196,6 +199,7 @@
 				F7DDCF58B843B870FE824FE9 /* ContentView.swift in Sources */,
 				DA1F39E762D9CC01488EF357 /* DataPayload.swift in Sources */,
 				F12829202F635C2C74313989 /* EntryPoint.swift in Sources */,
+				ADA271C742FCAA7ACFA77598 /* FloppyQRHTMLTemplate.swift in Sources */,
 				10740C3CB42EE181F50D28EA /* ImageProcessor.swift in Sources */,
 				F071A95DE7EEDF8140067D99 /* InlineBundler.swift in Sources */,
 				DE3BD91BD3B2119669C4DA9A /* LoaderHTMLTemplate.swift in Sources */,
