@@ -3,7 +3,7 @@ import AppKit
 
 struct PNGEncoder {
 
-    static func createDataDisk(payload: Data, originalImage: NSImage? = nil, width: Int = 1024, height: Int = 1024) -> Data {
+    static func createDataDisk(payload: Data, originalImage: NSImage? = nil, width: Int = 1024, height: Int = 1024, zLDR: Data? = nil) -> Data {
         var raw = Data(count: width * height * 4)
         raw.withUnsafeMutableBytes { (rp: UnsafeMutableRawBufferPointer) in
             let ptr = rp.baseAddress!.assumingMemoryBound(to: UInt8.self)
@@ -13,8 +13,8 @@ struct PNGEncoder {
                 ptr[off] = 255; ptr[off+1] = 255
                 ptr[off+2] = 255; ptr[off+3] = 255
             }
-            // Draw original image centered (256x256) with smooth scaling
-            if let img = originalImage, let cgImg = img.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+            // Draw icon centered (256x256) with smooth scaling
+            do {
                 let iw = 256, ih = 256
                 let ox = (width - iw) / 2, oy = (height - ih) / 2
                 let cs = CGColorSpaceCreateDeviceRGB()
@@ -24,7 +24,15 @@ struct PNGEncoder {
                     space: cs,
                     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
                 ), let cgData = cgCtx.data {
-                    cgCtx.draw(cgImg, in: CGRect(x: 0, y: 0, width: iw, height: ih))
+                    if let cgImg = originalImage?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                        cgCtx.draw(cgImg, in: CGRect(x: 0, y: 0, width: iw, height: ih))
+                    } else {
+                        let r = CGRect(x: 14, y: 14, width: iw - 28, height: ih - 28)
+                        let p = CGPath(roundedRect: r, cornerWidth: 44, cornerHeight: 44, transform: nil)
+                        cgCtx.addPath(p)
+                        cgCtx.setFillColor(CGColor(red: 0.145, green: 0.388, blue: 0.922, alpha: 1))
+                        cgCtx.fillPath()
+                    }
                     let src = cgData.assumingMemoryBound(to: UInt8.self)
                     for y in 0..<ih {
                         for x in 0..<iw {
@@ -64,6 +72,10 @@ struct PNGEncoder {
                 if let iend = result.range(of: "IEND".data(using: .ascii)!, options: .backwards) {
                     let pos = iend.lowerBound - 4
                     result.insert(contentsOf: makeChunk("zDAT", payload), at: pos)
+                    if let ld = zLDR {
+                        let ldPos = result.range(of: "IEND".data(using: .ascii)!, options: .backwards)!.lowerBound - 4
+                        result.insert(contentsOf: makeChunk("zLDR", ld), at: ldPos)
+                    }
                 }
                 return result
             }

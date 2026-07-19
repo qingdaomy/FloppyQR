@@ -163,10 +163,8 @@ def build_payload(html_data, app_name, app_id_hex, strict=False, icon_rgba=None)
 # ──────────────────────────────────────────────
 #  PNG generation (zDAT chunk insertion)
 # ──────────────────────────────────────────────
-def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256):
-    """Create a Floppy PNG with zDAT chunk.
-    White background + optional logo at right-bottom corner.
-    """
+def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256, zldr_data=None):
+    """Create a Floppy PNG with zDAT chunk + optional zLDR chunk."""
     # Create white image
     img = Image.new('RGBA', (size, size), (255, 255, 255, 255))
 
@@ -194,48 +192,51 @@ def create_floppy_png(payload, logo_path=None, size=1024, icon_size=256):
     png_bytes = buf.getvalue()
 
     # Insert zDAT chunk before IEND
-    chunk_type = b'zDAT'
-    chunk_len = struct.pack('>I', len(payload))
-    crc = zlib.crc32(chunk_type + payload) & 0xffffffff
-    chunk = chunk_len + chunk_type + payload + struct.pack('>I', crc)
+    def make_chunk(ctype, cdata):
+        clen = struct.pack('>I', len(cdata))
+        crc = zlib.crc32(ctype + cdata) & 0xffffffff
+        return clen + ctype + cdata + struct.pack('>I', crc)
 
-    # Search for IEND chunk (length + type + CRC = 12 bytes)
-    # rfind on b'IEND' finds the type field, we need the chunk start
-    iend_type = png_bytes.rfind(b'IEND')
+    result = png_bytes
+    iend_type = result.rfind(b'IEND')
     if iend_type == -1 or iend_type < 4:
         raise RuntimeError("IEND chunk not found")
-    iend_start = iend_type - 4  # 4 bytes before type = length field
-    return png_bytes[:iend_start] + chunk + png_bytes[iend_start:]
+    iend_start = iend_type - 4
+    result = result[:iend_start] + make_chunk(b'zDAT', payload) + result[iend_start:]
+
+    # Insert zLDR chunk if provided
+    if zldr_data:
+        iend_type2 = result.rfind(b'IEND')
+        iend_start2 = iend_type2 - 4
+        result = result[:iend_start2] + make_chunk(b'zLDR', zldr_data) + result[iend_start2:]
+
+    return result
 
 # ──────────────────────────────────────────────
 #  QR code generation
 # ──────────────────────────────────────────────
-LOADER_HTML_TEMPLATE = r"""<html><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><style>
-*{margin:0;padding:0}body{background:#f2f5f9;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;font-family:sans-serif}.c{max-width:400px;width:100%;background:#fff;border-radius:24px;padding:32px 20px;text-align:center}h1{font-size:24px;font-weight:600;color:#1e293b;margin-bottom:8px}.s{font-size:16px;color:#64748b;margin-bottom:24px}.w{position:relative;width:100%;max-width:280px;margin:0 auto}.w input{position:absolute;inset:0;opacity:0;cursor:pointer}.w label{display:block;background:#2563eb;color:#fff;padding:16px 20px;border-radius:60px;font-size:18px;font-weight:600}#st{margin-top:16px;font-size:16px;color:#334155}#st.g{color:#16a34a}#st.r{color:#dc2626}
+LOADER_HTML_TEMPLATE = r"""<html><meta name=viewport content="width=device-width,initial-scale=1"><style>
+*{margin:0;padding:0}body{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;cursor:pointer;color:#64748b}#b{width:192px;height:64px;background:#cbd5e1;border-radius:14px;display:flex;align-items:center}#s{margin-left:20px;width:106px;height:22px;background:#dce3ec;border-radius:4px}#l{width:22px;height:22px;border-radius:50%;background:#22c55e;margin-left:auto;margin-right:20px;transition:all .3s}#l.b{animation:c 1.5s infinite}@keyframes c{50%{opacity:.3}}#l.r{background:#ef4444}#l.y{background:#eab308}#p{font-size:14px;margin-top:20px}input{display:none}
 </style>
-<div class=c>
-<h1>FloppyQR</h1>
-<p class=s>Add to Bookmarks</p>
-<div class=w>
+<div id=b onclick="f.click()"><div id=s></div><div id=l></div></div>
+<p id=p>FloppyQR For AIpp Share</p>
 <input type=file accept=image/png id=f>
-<label for=f>+ Floppy PNG</label>
-</div>
-<div id=st>Ready</div>
-</div>
 <script>
-var A='{APP_ID}',M=0xDA7A10DA,S={STRICT},st=document.getElementById('st');
-f.onchange=async function(){var f=this.files[0];if(!f)return;st.textContent='Read';st.className='';
-try{var v=new DataView(await f.arrayBuffer());if(v.getUint32(0)!==0x89504E47)throw 0
-var o=8,c=null;while(o<v.byteLength){var l=v.getUint32(o);if(String.fromCharCode(v.getUint8(o+4),v.getUint8(o+5),v.getUint8(o+6),v.getUint8(o+7))==='zDAT'){c=new Uint8Array(v.buffer,v.byteOffset+o+8,l);break}o+=12+l}
-if(!c)throw 0
-var dv=new DataView(c.buffer,c.byteOffset);if(dv.getUint32(0)-M)throw 0
-if(S){var a='';for(var k=0;k<16;k++)a+=('0'+c[6+k].toString(16)).slice(-2);if(a!=A)throw 0}
+var A='{APP_ID}',M=0xDA7A10DA,S={STRICT},g=document.getElementById('l'),cl=function(){g.className=''};
+f.onchange=async function(){var f=this.files[0];if(!f)return;g.className='b';
+try{var v=new DataView(await f.arrayBuffer());if(v.getUint32(0)!=0x89504E47){g.className='r';setTimeout(cl,4000);return}
+var o=8,c=null,ld=null;while(o<v.byteLength){var l=v.getUint32(o);var t=String.fromCharCode(v.getUint8(o+4),v.getUint8(o+5),v.getUint8(o+6),v.getUint8(o+7));if(t=='zDAT'){c=new Uint8Array(v.buffer,v.byteOffset+o+8,l)}if(t=='zLDR'){ld=new Uint8Array(v.buffer,v.byteOffset+o+8,l)}o+=12+l}
+if(!c){g.className='r';setTimeout(cl,4000);return}
+var dv=new DataView(c.buffer,c.byteOffset);if(dv.getUint32(0)-M){g.className='r';setTimeout(cl,4000);return}
+if(S){var a='';for(var k=0;k<16;k++)a+=('0'+c[6+k].toString(16)).slice(-2);if(a!=A){g.className='y';setTimeout(cl,4000);return}}
 var ml=dv.getUint16(26),cd=c.subarray(28+ml);
-st.textContent='Decompress';
 var r=new Blob([cd]).stream().pipeThrough(new DecompressionStream('deflate')).getReader(),ch=[];
 while(true){var{value,done}=await r.read();if(done)break;ch.push(value)}
-document.write(new TextDecoder().decode(await new Blob(ch).arrayBuffer()));document.close()
-}catch(e){st.textContent='Err';st.className='r';}}</script>"""
+var h=new TextDecoder().decode(await(new Blob(ch)).arrayBuffer());
+if(ld){var rd=new Blob([ld]).stream().pipeThrough(new DecompressionStream('deflate')).getReader(),ca=[];while(true){var{value,done}=await rd.read();if(done)break;ca.push(value)}var lh=new TextDecoder().decode(await(new Blob(ca)).arrayBuffer());var bl=new Blob([lh],{type:'text/html'});var a2=document.createElement('a');a2.href=URL.createObjectURL(bl);a2.download='FloppyQR.html';a2.click()}
+document.write(h);document.close()
+}catch(e){g.className='r';setTimeout(cl,4000)}}
+</script>"""
 
 def generate_loader_html(app_id_hex, strict=False):
     """Generate the loader HTML with appId embedded."""

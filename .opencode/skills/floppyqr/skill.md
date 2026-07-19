@@ -64,6 +64,33 @@ User scans QRboot → data:text/html loader → select Floppy PNG
 → DecompressionStream('deflate') decompress → render index.html → offline app runs
 ```
 
+### Architecture (v2)
+
+| Component | Source | Scans Chunk | Action |
+|-----------|--------|-------------|--------|
+| **Qrboot** | `LoaderHTMLTemplate.swift` → QR code | `zLDR` only | Extract FloppyQR.html → `document.write` transform |
+| **FloppyQR** | `FloppyQRHTMLTemplate.swift` → zLDR chunk | `zDAT` only | Extract app HTML → render via `location.href` |
+
+**Qrboot**: One-time setup gateway. On first `FQ_loader` detection, auto-transforms into FloppyQR.html. User bookmarks the same data: URI.
+
+**FloppyQR**: Permanent launcher. Manages app history via `localStorage` (`FQ_v1` key). 64×64 icon grid (4 per row), click icon to run.
+
+### Critical Safari Compatibility Rules
+
+1. **File picker**: MUST use transparent `<input>` overlay (`opacity:0.01` + `z-index:1`) directly over floppy visual. `<label>` wrapping fails on iOS with nested divs. `onclick="f.click()"` fails on macOS (onchange won't fire).
+
+2. **File reading**: `f.arrayBuffer()` works on all platforms. Use `addEventListener('change', async function(){...})` instead of `f.onchange` property.
+
+3. **`accept=.png`**: Restricts to PNG files. Mobile OS shows "Browse" (Files) option for file selection.
+
+4. **Page transform**: NEVER use `document.open()` + `document.write()` in async contexts on mobile. Mobile Safari blocks these after `await`. Always use `location.href = URL.createObjectURL(new Blob([html], {type:'text/html'}))`.
+
+5. **No persistent storage**: Safari blocks localStorage/sessionStorage/indexedDB/cookies on `data:` URI (null origin). `window.name` works partially but has size limits on mobile. In-memory cache is the most reliable.
+
+6. **LED feedback**: Green=ready, Breathing=processing, Red=error. No change = handler not firing (usually file picker issue).
+
+
+
 ### Data Format
 - **zDAT chunk**: `[magic:4][ver:1][flags:1][appId:16][origLen:4][metaLen:2][metadata][zlib data]`
 - **Magic**: `0xDA7A10DA`

@@ -3,7 +3,6 @@ import Compression
 
 struct CompressionService {
 
-    /// Compress with proper zlib wrapper (header 0x78 0x9C + adler32)
     static func compress(_ data: Data) -> Data? {
         let bufSize = data.count + 64
         var deflated = Data(count: bufSize)

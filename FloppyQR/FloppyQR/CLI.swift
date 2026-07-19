@@ -88,14 +88,16 @@ struct CLI {
 
         // 4. Generate Floppy PNG
         print("🖼️  生成 Floppy PNG...")
-        let pngData = PNGEncoder.createDataDisk(payload: payload, originalImage: iconImage)
+        let floppyQRHTML = FloppyQRHTMLTemplate.generate(appId: appIdHex, strict: strict)
+        let zLDRData = CompressionService.compress(floppyQRHTML.data(using: .utf8)!)
+        let pngData = PNGEncoder.createDataDisk(payload: payload, originalImage: iconImage, zLDR: zLDRData)
 
         // 5. Generate QRboot
         print("📱 生成 QRboot...")
         let loaderHTML = LoaderHTMLTemplate.generate(appId: appIdHex, strict: strict)
-        let allowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~!*'();:@&=+$,/?%[]{}|")
+        let allowed = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~!$&'()*+,;=/:?@{}[]`")
         let encoded = loaderHTML.addingPercentEncoding(withAllowedCharacters: allowed) ?? loaderHTML
-        let dataURI = "data:text/html;charset=UTF-8,\(encoded)"
+        let dataURI = "data:text/html,\(encoded)"
         guard let qrPNG = QRCodeGenerator.pngData(from: dataURI) else {
             print("❌ QR 码生成失败")
             return

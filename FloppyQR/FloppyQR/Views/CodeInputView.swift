@@ -26,8 +26,14 @@ struct CodeInputView: View {
                 if !projects.isEmpty {
                     Button(L("history")) { showHistory.toggle() }
                         .controlSize(.small)
-                        .popover(isPresented: $showHistory) {
+                        .sheet(isPresented: $showHistory) {
                             VStack(spacing: 0) {
+                                HStack {
+                                    Text(L("recent")).font(.headline)
+                                    Spacer()
+                                    Button("✕") { showHistory = false }.controlSize(.small)
+                                }.padding(.horizontal, 16).padding(.top, 12)
+
                                 ForEach(projects) { p in
                                     HStack {
                                         VStack(alignment: .leading) {
@@ -36,17 +42,17 @@ struct CodeInputView: View {
                                                 .font(.caption2).foregroundColor(.secondary)
                                         }
                                         Spacer()
+                                        Button(L("load")) { htmlCode = p.htmlFull; showHistory = false }
+                                            .controlSize(.small)
                                     }
-                                    .padding(.horizontal, 12)
+                                    .padding(.horizontal, 16)
                                     .padding(.vertical, 8)
-                                    .contentShape(Rectangle())
-                                    .onTapGesture { htmlCode = p.htmlFull; showHistory = false }
                                     .contextMenu { Button(L("delete"), role: .destructive) { deleteProject(p) } }
                                     Divider()
                                 }
                             }
-                            .frame(width: 220)
-                            .padding(.vertical, 4)
+                            .frame(width: 280, height: 300)
+                            .padding(.bottom, 12)
                         }
                 }
             }

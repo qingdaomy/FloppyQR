@@ -72,10 +72,53 @@ Examples:
     payload = build_payload(html_data, args.name, app_id_hex, args.strict, icon_rgba)
     compressed_size = len(payload) - (28 + 4132)
 
-    # ── 4. Create Floppy PNG ──
+    # ── 4. Create Floppy PNG with zLDR (FloppyQR loader) ──
     print("🖼️  生成 Floppy PNG...")
     logo_path = args.icon if not args.no_logo else None
-    png_data = create_floppy_png(payload, logo_path=logo_path)
+    # Generate FloppyQR HTML for zLDR chunk
+    loader_name = args.developer or 'App'
+    zldr_html = f"""<!DOCTYPE html><html><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>FloppyQR</title><style>
+*{{margin:0;padding:0}}body{{background:#f8fafc;font-family:sans-serif;color:#334155;padding:20px;max-width:500px;margin:0 auto}}h1{{font-size:20px;color:#1e293b;text-align:center;margin:16px 0}}#b{{width:192px;height:64px;background:#cbd5e1;border-radius:14px;display:flex;align-items:center;cursor:pointer;margin:0 auto}}#s{{margin-left:20px;width:106px;height:22px;background:#dce3ec;border-radius:4px}}#l{{width:22px;height:22px;border-radius:50%;background:#22c55e;margin-left:auto;margin-right:20px;transition:all .3s}}.b{{animation:c 1.5s infinite}}@keyframes c{{50%{{opacity:.3}}}}.r{{background:#ef4444!important}}.y{{background:#eab308!important}}h2{{font-size:16px;margin:20px 0 10px;color:#475569}}.i{{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}}.i .n{{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.i .d{{font-size:11px;color:#94a3b8}}.i button{{padding:5px 14px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0}}.rn{{background:#22c55e;color:#fff}}.dl{{background:#fee2e2;color:#dc2626}}.emp{{text-align:center;color:#94a3b8;font-size:14px;padding:20px}}.ft{{text-align:center;color:#94a3b8;font-size:12px;margin-top:20px}}
+</style>
+<h1>\\U0001f4be FloppyQR</h1>
+<div id=b onclick="document.getElementById('f').click()"><div id=s></div><div id=l></div></div>
+<p style=text-align:center;color:#94a3b8;font-size:13px;margin:8px 0>\\u9009\\u62e9 Floppy PNG</p>
+<h2>\\u5386\\u53f2\\u5e94\\u7528</h2>
+<div id=lst><div class=emp>\\u6682\\u65e0\\u5386\\u53f2</div></div>
+<p class=ft>FloppyQR</p>
+<input type=file accept=image/png id=f style=display:none>
+<script>
+var M=0xDA7A10DA,g=document.getElementById('l'),K='FloppyQR';
+function C(){{return JSON.parse(localStorage.getItem(K)||'[]')}}
+function S(a){{localStorage.setItem(K,JSON.stringify(a))}}
+function R(){{var a=C(),h=document.getElementById('lst');h.innerHTML='';
+if(!a.length){{h.innerHTML='<div class=emp>\\u6682\\u65e0\\u5386\\u53f2</div>';return}}
+a.slice().reverse().forEach(function(x){{
+var d=document.createElement('div');d.className='i';
+var n=document.createElement('div');n.className='n';n.textContent=x.n;
+var dt=document.createElement('div');dt.className='d';dt.textContent=new Date(x.t).toLocaleDateString();
+var nb=document.createElement('button');nb.className='rn';nb.textContent='\\u8fd0\\u884c';
+nb.onclick=function(){{var aa=C(),xx=aa.find(function(v){{return v.id==x.id}});if(xx){{document.open();document.write(xx.h);document.close()}}}};
+var db=document.createElement('button');db.className='dl';db.textContent='\\u2715';
+db.onclick=function(){{var aa=C();aa=aa.filter(function(v){{return v.id!=x.id}});S(aa);R()}};
+var l=document.createElement('div');l.appendChild(n);l.appendChild(dt);
+d.appendChild(l);d.appendChild(nb);d.appendChild(db);h.appendChild(d)}})}}
+document.getElementById('f').onchange=async function(){{var f=this.files[0];if(!f)return;g.className='b';
+try{{
+var v=new DataView(await f.arrayBuffer());if(v.getUint32(0)!=0x89504E47){{g.className='r';setTimeout(function(){{g.className=''}},3000);return}}
+var o=8,c=null;while(o<v.byteLength){{var l=v.getUint32(o);if(String.fromCharCode(v.getUint8(o+4),v.getUint8(o+5),v.getUint8(o+6),v.getUint8(o+7))=='zDAT'){{c=new Uint8Array(v.buffer,v.byteOffset+o+8,l);break}}o+=12+l}}
+if(!c){{g.className='r';setTimeout(function(){{g.className=''}},3000);return}}
+var dv=new DataView(c.buffer,c.byteOffset);if(dv.getUint32(0)-M){{g.className='r';setTimeout(function(){{g.className=''}},3000);return}}
+var ml=dv.getUint16(26),cd=c.subarray(28+ml),r=new Blob([cd]).stream().pipeThrough(new DecompressionStream('deflate')).getReader(),ch=[];while(true){{var{{value,done}}=await r.read();if(done)break;ch.push(value)}}
+var h=new TextDecoder().decode(await(new Blob(ch)).arrayBuffer());
+var o2=8,nm='',id='';while(o2<v.byteLength){{var l2=v.getUint32(o2);var t2=String.fromCharCode(v.getUint8(o2+4),v.getUint8(o2+5),v.getUint8(o2+6),v.getUint8(o2+7));if(t2=='zDAT'){{var dd=new DataView(v.buffer,v.byteOffset+o2+8,l2);var ml2=dd.getUint16(26);var mb=new Uint8Array(v.buffer,v.byteOffset+o2+28,ml2);nm=new TextDecoder().decode(mb.slice(1,1+mb[0]));var aid=new Uint8Array(v.buffer,v.byteOffset+o2+14,16);id='';for(var i=0;i<16;i++)id+=aid[i].toString(16).padStart(2,'0');break}}o2+=12+l2}}
+var a=C();a=a.filter(function(x){{return x.id!=id}});a.push({{id:id,n:nm||'App',h:h,t:Date.now()}});if(a.length>10)a.shift();S(a);R();
+g.className='';document.open();document.write(h);document.close()
+}}catch(e){{g.className='r';setTimeout(function(){{g.className=''}},3000)}}}}
+R();
+</script>"""
+    zldr_compressed = __import__('zlib').compress(zldr_html.encode('utf-8'), level=9)
+    png_data = create_floppy_png(payload, logo_path=logo_path, zldr_data=zldr_compressed)
 
     # ── 5. Generate QRboot ──
     print("📱 生成 QRboot...")

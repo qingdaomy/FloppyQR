@@ -100,13 +100,15 @@ struct ContentView: View {
                 let compressedSize = payload.count - (28 + 4132)
 
                 await updateStatus(.generating(L("gen_png")))
-                let pngData = PNGEncoder.createDataDisk(payload: payload, originalImage: metadata.icon)
+                let floppyQRHTML = FloppyQRHTMLTemplate.generate(appId: appIdHex, strict: strictPairing)
+                let zLDRData = CompressionService.compress(floppyQRHTML.data(using: .utf8)!)
+                let pngData = PNGEncoder.createDataDisk(payload: payload, originalImage: metadata.icon, zLDR: zLDRData)
 
                 await updateStatus(.generating(L("gen_qr")))
                 let loaderHTML = LoaderHTMLTemplate.generate(appId: appIdHex, strict: strictPairing)
-                let allowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~!*'();:@&=+$,/?%[]{}|")
+                let allowed = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~!$&'()*+,;=/:?@{}[]`")
                 let encoded = loaderHTML.addingPercentEncoding(withAllowedCharacters: allowed) ?? loaderHTML
-                let dataURI = "data:text/html;charset=UTF-8,\(encoded)"
+                let dataURI = "data:text/html,\(encoded)"
 
                 guard let qrPNG = QRCodeGenerator.pngData(from: dataURI),
                       let qrImage = QRCodeGenerator.generate(from: dataURI) else {
