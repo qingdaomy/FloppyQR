@@ -31,25 +31,29 @@ Perfect for AI-generated demos, mini‑games, interactive tools, and educational
 
 ✨ Features
 
-📦 Single or multiple files – Pack your whole project (HTML + CSS + JS + assets) into one PNG.
+📦 **Single-file packing** – Pack HTML/CSS/JS projects into one PNG.
 
-🗜️ Automatic compression – Uses zlib + browser DecompressionStream for efficient size reduction.
+🗜️ **zlib compression** – Browser-native decompression (`DecompressionStream`).
 
-🖼️ Custom logo – Embed a visible logo in the Floppy image for easy identification.
+🖼️ **Custom icon** – Embed a visible icon in the Floppy PNG.
 
-🔗 Pairing mode – Optional App ID matching (strong/weak binding) between QRboot and Floppy.
+🔗 **Strict pairing** – Optional App ID matching. ID mismatch shows LED warning.
 
-🌍 Multi-language ready – Built‑in support for multiple UI languages (English, Chinese, etc.).
+🌍 **Multi-language** – English, Chinese, Spanish, French.
 
-📱 Mobile‑first UI – Touch‑friendly, responsive, works great on phones.
+📱 **Mobile Safari compatible** – Label-based file picker, no async/await, `FileReader` API.
 
-⚡ Instant launch – No installation, no server, no app store – just scan and use.
+⚡ **Instant launch** – No install, no server, no app store.
 
-🔄 Cross‑platform – Works in any modern browser (Chrome, Edge, Safari, Firefox).
+📋 **FloppyQR Manager** – Permanent launcher page with icon grid, history cache, delete management.
 
-🖥️ CLI tool – One‑command generation with rich parameter support.
+🔐 **Strict ID checking** – Imported Floppy's strict flag verified regardless of QR setting.
 
-🤖 AI Skill ready – Native integration with OpenCode, OpenClaw, and other AI coding agents.
+🔄 **Cross-platform** – Chrome, Edge, Safari, Firefox. macOS app + Python CLI.
+
+📎 **Pin Tab reminder** – Footer prompt to pin for quick access.
+
+🤖 **AI Skill ready** – OpenCode, OpenClaw integration.
 
 
 
@@ -84,7 +88,7 @@ They pick the Floppy_MyApp.png from their device.
 
 Your web app runs instantly!
 
-💡 Tip: Bookmark the loader page after first use for even faster access.
+💡 Tip: After first use, the Qrboot page transforms into FloppyQR Manager — a permanent launcher with app history, icon grid, and delete management. Bookmark the page for quick access.
 
 
 
@@ -166,6 +170,13 @@ QRboot is a tiny HTML page (≈1.4KB) that contains the loader logic. It is enco
 Floppy is a standard PNG image (1024×1024) with a hidden custom chunk (zDAT) that stores your compressed app bundle.
 
 The loader reads the PNG, extracts the zDAT chunk, decompresses it, and replaces the page with your app – all client‑side, no network required.
+
+**FloppyQR Manager**: After first import, Qrboot extracts `FloppyQR.html` from the Floppy PNG's `zLDR` chunk and transforms into a permanent launcher. The manager features:
+- Tap floppy to import more Floppy PNGs
+- Icon grid (64×64, 4 per row) with app name + version
+- History cache via `window.name`
+- **Edit mode**: toggle to delete unused apps (red × button)
+- **"Please Pin Tab"** footer reminder for quick access
 
 For detailed technical specification, see specs/floppyqr-spec-v1.md.
 
