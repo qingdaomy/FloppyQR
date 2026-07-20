@@ -14,8 +14,8 @@ struct FloppyQRHTMLTemplate {
 <div id=ft><span>Please Pin Tab</span><button id=mb onclick="RM()">Edit</button></div>
 <script>
 var M=0xDA7A10DA,A='\(appId)',ST=\(strict),L=document.getElementById('l'),MX=false;
-var C=[];(function(){try{var d=JSON.parse(window.name);if(Array.isArray(d))C=d}catch(e){}})();
-function SV(){try{window.name=JSON.stringify(C)}catch(e){}}
+var C=[];(function(){try{var d=JSON.parse(window.name);if(d&&Array.isArray(d.c))C=d.c;else if(Array.isArray(d))C=d}catch(e){}})();
+function SV(){try{var N={};try{N=JSON.parse(window.name)}catch(e){};N.c=C;window.name=JSON.stringify(N)}catch(e){}}
 function E(m){document.getElementById('g').innerHTML='<div id=e>'+m+'</div>'}
 function RM(){MX=!MX;document.getElementById('mb').textContent=MX?'Done':'Edit';R()}
 function R(){var h=document.getElementById('g');h.innerHTML='';if(!C.length){h.innerHTML='<div id=e style=color:#94a3b8;font-size:14px;grid-column:span 4;text-align:center;padding:40px 20px></div>';return}
