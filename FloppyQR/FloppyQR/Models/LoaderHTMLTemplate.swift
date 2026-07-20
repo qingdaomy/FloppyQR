@@ -11,7 +11,7 @@ struct LoaderHTMLTemplate {
 <input type=file id=f>
 <script>
 function D(b,f){var r=new Blob([b]).stream().pipeThrough(new DecompressionStream('deflate')).getReader(),a=[];(function n(){r.read().then(function(v){if(v.done){new Blob(a).arrayBuffer().then(function(b){f(new TextDecoder().decode(b))})}else{a.push(v.value);n()}})})()}
-(function(){try{var N=JSON.parse(window.name);if(N&&N.s){document.body.innerHTML='';document.write(N.s);return}}catch(e){}
+try{var N=JSON.parse(window.name);if(N&&N.s){window.name=JSON.stringify({c:N.c});location.href=URL.createObjectURL(new Blob([N.s],{type:'text/html'}))}}catch(e){}
 var g=document.getElementById('l'),t=function(){g.className=''};
 document.getElementById('f').addEventListener('change',function(){var f=this.files[0];if(!f)return;g.className='b';
 f.arrayBuffer().then(function(b){
@@ -26,10 +26,9 @@ if(!z){location.href=URL.createObjectURL(new Blob([H],{type:'text/html'}));retur
 D(z,function(Zh){
 try{var n=JSON.parse(window.name);var C=n&&n.c?n.c:[]}catch(e){var C=[]}
 C=C.filter(function(x){return x.id!=id});C.push({id:id,n:nm,ver:ver,ic:'',h:H,t:Date.now()});
-window.name=JSON.stringify({s:Zh,c:C});location.reload()
+window.name=JSON.stringify({s:Zh,c:C});location.href=URL.createObjectURL(new Blob([Zh],{type:'text/html'}))
 })})
 }).catch(function(){g.className='r'})})
-})();
 </script>
 """
         return s

@@ -7,7 +7,7 @@ Usage:
   python floppyqr.py -i ./project-dir -n "Game" -v "2.0" -d "Qingdaomy" -c ./icon.png -s
   python floppyqr.py --help
 """
-import os, sys, argparse, secrets, tempfile, shutil
+import os, sys, argparse, secrets, tempfile, shutil, re
 
 def format_bytes(b):
     if b >= 1024*1024:
@@ -34,12 +34,66 @@ Examples:
     parser.add_argument('-d', '--developer', default='', help='Developer name')
     parser.add_argument('-c', '--icon', default=None, help='Icon image path (PNG/JPEG)')
     parser.add_argument('-s', '--strict', action='store_true', help='Enable QRboot↔Floppy ID pairing')
+    parser.add_argument('--check', action='store_true', help='Run mobile compatibility check only')
     parser.add_argument('--no-logo', action='store_true', help='Skip logo on Floppy PNG')
 
     args = parser.parse_args()
     input_path = os.path.abspath(os.path.expanduser(args.input))
     output_dir = os.path.abspath(os.path.expanduser(args.output)) if args.output else os.getcwd()
     os.makedirs(output_dir, exist_ok=True)
+
+    # ── 0. Mobile compatibility check ──
+    if args.check or os.environ.get('FQ_CHECK'):
+        HAS_VIEWPORT = 0
+        MEDIA_COUNT = 0
+        HAS_FRAMEWORK = 0
+        FIXED_WIDTHS = 0
+
+        html_file = os.path.join(input_path, 'index.html') if os.path.isdir(input_path) else input_path
+        if os.path.isfile(html_file):
+            with open(html_file, 'r', encoding='utf-8', errors='ignore') as fh:
+                html_content = fh.read()
+            HAS_VIEWPORT = 1 if 'name="viewport"' in html_content or "name='viewport'" in html_content else 0
+            HAS_FRAMEWORK = 1 if any(fw in html_content.lower() for fw in ['bootstrap', 'tailwind', 'foundation', 'bulma']) else 0
+
+        css_dir = input_path if os.path.isdir(input_path) else os.path.dirname(input_path)
+        for root, dirs, files in os.walk(css_dir):
+            for fn in files:
+                if fn.endswith('.css'):
+                    fp = os.path.join(root, fn)
+                    try:
+                        with open(fp, 'r', encoding='utf-8', errors='ignore') as fh:
+                            css = fh.read()
+                        MEDIA_COUNT += css.count('@media')
+                        FIXED_WIDTHS += len(re.findall(r'min-width\s*:\s*\d+px', css))
+                        FIXED_WIDTHS += len(re.findall(r'width\s*:\s*\d{3,}px', css))
+                    except:
+                        pass
+
+        SCORE = 0
+        if HAS_VIEWPORT: SCORE += 40
+        if MEDIA_COUNT > 0: SCORE += 30
+        if HAS_FRAMEWORK: SCORE += 20
+        if FIXED_WIDTHS > 20: SCORE -= 10
+
+        print(f"\n📱 Mobile Compatibility Score: {SCORE}/100")
+        print(f"  {'✅' if HAS_VIEWPORT else '❌'} viewport meta: {'present' if HAS_VIEWPORT else 'MISSING (severe)'}")
+        print(f"  {'✅' if MEDIA_COUNT > 0 else '❌'} @media queries: {MEDIA_COUNT} found")
+        print(f"  {'✅' if HAS_FRAMEWORK else 'ℹ️'} CSS framework: {'detected' if HAS_FRAMEWORK else 'none found'}")
+        print(f"  {'⚠️' if FIXED_WIDTHS > 20 else '📏'} Fixed-width elements: {FIXED_WIDTHS}")
+        print()
+
+        if SCORE < 50:
+            print("⚠️  This app is NOT mobile-responsive. The Floppy PNG will work on desktop")
+            print("   but the app may display incorrectly on mobile phones.")
+            print("   Issues likely: nav overflow, sidebar overlap, popups off-screen.")
+            if args.check:
+                sys.exit(1 if os.environ.get('FQ_STRICT_CHECK') else 0)
+        elif SCORE < 80:
+            print("ℹ️  Partially mobile-responsive. Test on a real device before distributing.")
+
+        if args.check:
+            sys.exit(0)
 
     # ── 1. Read HTML ──
     if os.path.isdir(input_path):

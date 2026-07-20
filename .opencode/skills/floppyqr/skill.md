@@ -77,17 +77,17 @@ User scans QRboot → data:text/html loader → select Floppy PNG
 
 ### Critical Safari Compatibility Rules
 
-1. **File picker**: MUST use transparent `<input>` overlay (`opacity:0.01` + `z-index:1`) directly over floppy visual. `<label>` wrapping fails on iOS with nested divs. `onclick="f.click()"` fails on macOS (onchange won't fire).
+1. **File picker**: MUST use `<label for=f>` wrapping the floppy visual with `pointer-events:none` on the inner div. `<label>` is the only reliable way to trigger file input on iOS. `onclick="f.click()"` or transparent `<input>` are unreliable on iOS data: URI.
 
-2. **File reading**: `f.arrayBuffer()` works on all platforms. Use `addEventListener('change', async function(){...})` instead of `f.onchange` property.
+2. **File reading**: Use `document.getElementById('f').addEventListener('change', function(){})` (regular function, NOT async). `FileReader` or `f.arrayBuffer()` with `.then()` chains inside. NO `async/await` — mobile Safari loses user activation after awaits.
 
 3. **`accept=.png`**: Restricts to PNG files. Mobile OS shows "Browse" (Files) option for file selection.
 
-4. **Page transform**: NEVER use `document.open()` + `document.write()` in async contexts on mobile. Mobile Safari blocks these after `await`. Always use `location.href = URL.createObjectURL(new Blob([html], {type:'text/html'}))`.
+4. **Page transform**: NEVER use `document.write()` or `location.reload()`. Mobile Safari blocks these in async contexts. Always use `location.href = URL.createObjectURL(new Blob([html], {type:'text/html'}))`.
 
-5. **No persistent storage**: Safari blocks localStorage/sessionStorage/indexedDB/cookies on `data:` URI (null origin). `window.name` works partially but has size limits on mobile. In-memory cache is the most reliable.
+5. **No persistent storage**: Safari blocks localStorage/sessionStorage/indexedDB/cookies on `data:` URI (null origin). `window.name` persists within same-tab navigation. For multi-app cache, store in `window.name` as `{c: [appArray]}`.
 
-6. **LED feedback**: Green=ready, Breathing=processing, Red=error. No change = handler not firing (usually file picker issue).
+6. **LED feedback**: Green=ready, Breathing=processing, Red=error (no timeout clear). No change = handler not firing (usually file picker issue).
 
 
 
@@ -113,8 +113,79 @@ User scans QRboot → data:text/html loader → select Floppy PNG
      chmod +x /tmp/FloppyQR/FloppyQR.app/Contents/MacOS/FloppyQR
    fi
    ```
-3. Agent runs FloppyQR CLI on user's project
-4. Agent returns generated QRboot + Floppy PNGs
+3. **Agent runs mobile compatibility pre-flight check** on user's project:
+   ```bash
+   INPUT="$1"  # user's project directory or HTML file
+   
+   # Find the main HTML file
+   if [ -d "$INPUT" ]; then
+     HTML_FILE="$INPUT/index.html"
+   else
+     HTML_FILE="$INPUT"
+   fi
+   
+   if [ ! -f "$HTML_FILE" ]; then
+     echo "❌ No index.html found"
+     exit 1
+   fi
+   
+   # Check viewport meta
+   HAS_VIEWPORT=$(grep -c "name=.viewport" "$HTML_FILE" 2>/dev/null || echo 0)
+   
+   # Check @media queries in CSS files
+   MEDIA_COUNT=0
+   CSS_FILES=$(find "$(dirname "$HTML_FILE")" -name "*.css" 2>/dev/null)
+   for CSS in $CSS_FILES; do
+     COUNT=$(grep -c "@media" "$CSS" 2>/dev/null || echo 0)
+     MEDIA_COUNT=$((MEDIA_COUNT + COUNT))
+   done
+   
+   # Check CSS framework (Bootstrap/Tailwind)
+   HAS_FRAMEWORK=$(grep -ic "bootstrap\|tailwind\|foundation\|bulma" "$HTML_FILE" 2>/dev/null || echo 0)
+   
+   # Count fixed-width elements in CSS
+   FIXED_WIDTHS=0
+   for CSS in $CSS_FILES; do
+     COUNT=$(grep -cP "min-width\s*:\s*\d+px|width\s*:\s*\d{3,}px" "$CSS" 2>/dev/null || echo 0)
+     FIXED_WIDTHS=$((FIXED_WIDTHS + COUNT))
+   done
+   
+   # Score calculation
+   SCORE=0
+   [ "$HAS_VIEWPORT" -gt 0 ] && SCORE=$((SCORE + 40))
+   [ "$MEDIA_COUNT" -gt 0 ] && SCORE=$((SCORE + 30))
+   [ "$HAS_FRAMEWORK" -gt 0 ] && SCORE=$((SCORE + 20))
+   [ "$FIXED_WIDTHS" -gt 20 ] && SCORE=$((SCORE - 10))
+   
+   echo "📱 Mobile Compatibility Score: $SCORE/100"
+   [ "$HAS_VIEWPORT" -gt 0 ] && echo "  ✅ viewport meta: present" || echo "  ❌ viewport meta: MISSING (severe)"
+   [ "$MEDIA_COUNT" -gt 0 ] && echo "  ✅ @media queries: $MEDIA_COUNT found" || echo "  ❌ @media queries: NONE (not responsive)"
+   [ "$HAS_FRAMEWORK" -gt 0 ] && echo "  ✅ CSS framework detected" || echo "  ⚠️ No CSS framework detected"
+   echo "  📏 Fixed-width elements: $FIXED_WIDTHS"
+   
+   if [ "$SCORE" -lt 50 ]; then
+     echo ""
+     echo "⚠️  This app is NOT mobile-responsive. The Floppy PNG will work on desktop"
+     echo "   but the app may display incorrectly on mobile phones."
+     echo "   Issues likely: nav overflow, sidebar overlap, popups off-screen."
+     echo ""
+     echo "   Continue packaging anyway? [y/N]"
+     read -r CONFIRM
+     if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+       echo "❌ Packaging cancelled. Please add responsive CSS before retrying."
+       exit 1
+     fi
+   elif [ "$SCORE" -lt 80 ]; then
+     echo ""
+     echo "ℹ️  Partially mobile-responsive. Test on a real device before distributing."
+   fi
+   ```
+4. **If user confirms**, Agent runs FloppyQR CLI on user's project:
+   ```bash
+   FloppyQR.app/Contents/MacOS/FloppyQR -i "$INPUT" -n "$APP_NAME" -o "$OUTPUT_DIR"
+   ```
+5. Agent returns generated QRboot + Floppy PNGs
+6. **If app was not mobile-ready**: remind user that the app may not display correctly on mobile
 
 ## Cross-Platform (Linux/Windows/macOS)
 
