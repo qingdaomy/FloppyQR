@@ -11,7 +11,7 @@ struct FloppyQRHTMLTemplate {
 <input type=file accept=.png id=f>
 <div id=t>My FloppyQR AiPP</div>
 <div id=g></div>
-<div id=ft><span>Please Pin Tab</span><button id=mb onclick="RM()">Edit</button></div>
+<div id=ft><span>Never Close Your Tab</span><button id=mb onclick="RM()">Edit</button></div>
 <script>
 var M=0xDA7A10DA,A='\(appId)',ST=\(strict),L=document.getElementById('l'),MX=false;
 var C=[];(function(){try{var d=JSON.parse(window.name);if(d&&Array.isArray(d.c))C=d.c;else if(Array.isArray(d))C=d}catch(e){}})();
