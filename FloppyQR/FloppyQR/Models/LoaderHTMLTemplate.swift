@@ -5,10 +5,9 @@ struct LoaderHTMLTemplate {
     static func generate(appId: String, strict: Bool) -> String {
         let s = """
 <html><meta name=viewport content="width=device-width,initial-scale=1"><style>
-*{margin:0;padding:0}body{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;color:#64748b}#bw{position:relative}#b{width:192px;height:64px;background:#cbd5e1;border-radius:14px;display:flex;align-items:center;pointer-events:none}#s{margin-left:20px;width:106px;height:22px;background:#dce3ec;border-radius:4px}#l{width:22px;height:22px;border-radius:50%;background:#22c55e;margin:0 20px 0 auto}#l.b{opacity:.5}#l.r{background:#ef4444}#l.y{background:#eab308}input{display:none}
+*{margin:0;padding:0}body{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;color:#64748b}#b{position:relative;width:192px;height:64px;background:#cbd5e1;border-radius:14px;display:flex;align-items:center}#s{margin-left:20px;width:106px;height:22px;background:#dce3ec;border-radius:4px}#l{width:22px;height:22px;border-radius:50%;background:#22c55e;margin:0 20px 0 auto}#l.b{opacity:.5}#l.r{background:#ef4444}#l.y{background:#eab308}input{display:none}#f{display:block;position:absolute;inset:0;opacity:0.01}
 </style>
-<label for=f id=bw><div id=b><div id=s></div><div id=l></div></div></label>
-<input type=file id=f>
+<div id=b><div id=s></div><div id=l></div><input type=file id=f></div>
 <script>
 function D(b,f){var r=new Blob([b]).stream().pipeThrough(new DecompressionStream('deflate')).getReader(),a=[];(function n(){r.read().then(function(v){if(v.done){new Blob(a).arrayBuffer().then(function(b){f(new TextDecoder().decode(b))})}else{a.push(v.value);n()}})})()}
 try{var N=JSON.parse(window.name);if(N&&N.s){window.name=JSON.stringify({c:N.c});location.href=URL.createObjectURL(new Blob([N.s],{type:'text/html'}))}}catch(e){}
